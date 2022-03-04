@@ -28,7 +28,7 @@ $ tensil rtl -a <tarch_file> -d <axi_port_width>
 ```
 
 To compile with an example model and architecture file, the command is
-```bash
+```
 $ tensil rtl -a /demo/arch/ultra96v2.tarch -d 128
 ```
 

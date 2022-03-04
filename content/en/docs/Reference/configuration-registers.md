@@ -1,0 +1,23 @@
+---
+title: "Configuration registers"
+linkTitle: "Configuration registers"
+date: 2022-03-03
+description: >
+  A description of the Tensor Compute Unit configuration registers
+---
+
+
+| **Name**               | **Meaning**                                                                                                                                                                                                                                                            | **Width (bits)** | **Number** | **Default value** |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ---------- | ----------------- |
+| DRAM0 address offset\* | The offset in DRAM of the memory space allocated for use by the DRAM0 interface                                                                                                                                                                                        | 32               | 0x00       | 0x0000            |
+| DRAM0 cache behaviour  | This register is passed without modification to the AXI converter for the DRAM0 interface, where it is used as the value of the AxCACHE field in both reads and writes. Default value of 0b0000 indicates no caching allowed. See AXI4 protocol spec for more details. | 4                | 0x01       | 0b0000            |
+| &lt;unused>            | \-                                                                                                                                                                                                                                                                     | \-               | 0x02-0x03  | \-                |
+| DRAM1 address offset\* | The offset in DRAM of the memory space allocated for use by the DRAM1 interface                                                                                                                                                                                        | 32               | 0x04       | 0x0000            |
+| DRAM1 cache behaviour  | This register is passed without modification to the AXI converter for the DRAM1 interface, where it is used as the value of the AxCACHE field in both reads and writes. Default value of 0b0000 indicates no caching allowed. See AXI4 protocol spec for more details. | 4                | 0x05       | 0b0000            |
+| &lt;unused>            | \-                                                                                                                                                                                                                                                                     | \-               | 0x06-0x07  | \-                |
+| Timeout                | The number of cycles the decoder will remain in the same state before raising the timeout flag. This usually indicates something has stalled and is useful for triggering debug ILAs.                                                                                  | 16               | 0x08       | 0x0064            |
+| Tracepoint             | The value of the program counter at which the tracepoint flag will be raised. Useful for triggering debug ILAs to inspect hardware state during execution.                                                                                                             | 32               | 0x09       | 0xFFFFFFFF        |
+| Program counter        | Increments by 1 every time an instruction is completely processed.                                                                                                                                                                                                     | 32               | 0x0A       | 0x00000000        |
+| Sample interval        | The period in cycles at which to sample the program counter and decoder control bus handshake signals. Default value of 0x0000 disables sampling.                                                                                                                      | 16               | 0x0B       | 0x0000            |
+
+\*DRAM address offsets are specified in 64K blocks. The real address offset is 2^16 times the address offset register value configured. That is, if the DRAMx address offset register is configured with value 0x0001, the actual address offset that will appear in requests on the AXI bus will be 0x00010000.
