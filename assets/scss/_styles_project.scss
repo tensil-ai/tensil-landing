@@ -1,3 +1,16 @@
 .lead .mt-5 {
     font-weight: bold;
 }
+
+
+blockquote > footer {
+    min-height: 10px;
+}
+
+
+// disable repository links
+
+.td-page-meta--view { display: none !important; }
+.td-page-meta--edit { display: none !important; }
+.td-page-meta--child { display: none !important; }
+.td-page-meta--issue { display: none !important; }
