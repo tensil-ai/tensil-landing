@@ -12,7 +12,7 @@ description: >
 - an AXI data width in bits (check your FPGA product page)
 
 
-## 1. Running the Tensil RTL generator
+## 1. Run the Tensil RTL generator
 
 First, ensure you have Tensil installed by pulling and running the Tensil Docker container:
 
