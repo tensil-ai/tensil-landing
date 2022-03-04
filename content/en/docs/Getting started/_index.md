@@ -5,33 +5,41 @@ title: "Getting Started"
 linkTitle: "Getting Started"
 weight: 2
 description: >
-  What does your user need to know to try your project?
+  The essentials for getting started with Tensil
 ---
-
-{{% pageinfo %}}
-This is a placeholder page that shows you how to use this template site.
-{{% /pageinfo %}}
-
-Information in this section helps your user try your project themselves.
-
-* What do your users need to do to start using your project? This could include downloading/installation instructions, including any prerequisites or system requirements.
-
-* Introductory “Hello World” example, if appropriate. More complex tutorials should live in the Tutorials section.
-
-Consider using the headings below for your getting started page. You can delete any that are not applicable to your project.
 
 ## Prerequisites
 
-Are there any system requirements for using your project? What languages are supported (if any)? Do users need to already have any software or tools installed?
+The easiest way to get started with Tensil is through our Docker containers. Therefore, we recommend [installing Docker](https://docs.docker.com/engine/install/) before continuing.
 
 ## Installation
 
-Where can your user find your project code? How can they install it (binaries, installable package, build from source)? Are there multiple options/versions they can install and how should they choose the right one for them?
+To install from Docker, run:
 
-## Setup
+```bash
+$ docker pull tensilai/tensil:latest
+$ docker run -v $(pwd):/work -w /work -it tensilai/tensil:latest bash
+```
 
-Is there any initial setup users need to do after installation to try your project?
+You will be dropped into a shell inside the Tensil container. Run
+
+```bash
+$ tensil compile --help
+```
+
+to verify that it is working correctly.
 
 ## Try it out!
 
-Can your users test their installation, for example by running a command or deploying a Hello World example?
+Try compiling an example ML model:
+
+```bash
+$ tensil compile -a /demo/arch/ultra96v2.tarch -m /demo/models/resnet20v2_cifar.onnx -o "Identity:0" -s true
+```
+
+Next up, try a [tutorial]({{< relref "/docs/tutorials" >}}) to learn how to use Tensil.
+
+## For Contributors
+### Installation from source
+
+See the project [README](https://github.com/tensil-ai/tensil#for-maintainers) for instructions on how to build from source.

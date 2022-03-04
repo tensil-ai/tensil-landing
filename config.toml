@@ -196,12 +196,19 @@ enable = false
   icon = "fab fa-github"
   desc = "Development takes place here!"
 [[params.links.developer]]
-  name = "Slack"
+  name = "Discord"
   url = "https://example.org/slack"
-  icon = "fab fa-slack"
+  icon = "fab fa-discord"
   desc = "Chat with other project developers"
 [[params.links.developer]]
   name = "Developer mailing list"
   url = "https://example.org/mail"
   icon = "fa fa-envelope"
   desc = "Discuss development issues around the project"
+
+
+[[menu.main]]
+  name = " "
+  url = "https://github.com/tensil-ai/tensil"
+  pre = "<iframe src='https://ghbtns.com/github-btn.html?user=tensil-ai&repo=tensil&type=star&count=true&size=large' frameborder='0' scrolling='0' width='170' height='30' title='GitHub'></iframe>"
+  weight = 1

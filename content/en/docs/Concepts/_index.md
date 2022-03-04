@@ -1,17 +1,39 @@
 ---
 title: "Concepts"
 linkTitle: "Concepts"
-weight: 4
+weight: 10
 description: >
-  What does your user need to understand about your project in order to use it - or potentially contribute to it? 
+  Key concepts that will help you understand what Tensil does
 ---
 
-{{% pageinfo %}}
-This is a placeholder page that shows you how to use this template site.
-{{% /pageinfo %}}
+## Register Transfer Level (RTL) code
 
-For many projects, users may not need much information beyond the information in the [Overview](/docs/overview/), so this section is **optional**. However if there are areas where your users will need a more detailed understanding of a given term or feature in order to do anything useful with your project (or to not make mistakes when using it) put that information in this section. For example, you may want to add some conceptual pages if you have a large project with many components and a complex architecture.
+RTL is code that describes the behaviour of computational hardware. It contains constructs like modules, input and output ports, signals, registers and low-level operations. Typical RTL languages are Verilog and VHDL. An example of Verilog is shown below. Electronic design automation (EDA) tools can turn RTL into descriptions of physically realizable circuits, which can be flashed onto an FPGA or taped out as an ASIC.
 
-Remember to focus on what the user needs to know, not just what you think is interesting about your project! If they don’t need to understand your original design decisions to use or contribute to the project, don’t put them in, or include your design docs in your repo and link to them. Similarly, most users will probably need to know more about how features work when in use rather than how they are implemented. Consider a separate architecture page for more detailed implementation and system design information that potential project contributors can consult.
 
+```verilog
+module foo(
+  input a,
+  input b,
+  output c
+);
+  assign c = a || b;
+endmodule
+```
+
+## RTL Generator
+
+An RTL generator produces a blob of RTL given some high level architectural parameters. This allows you to easily create customized RTL
+that is specialized for a given application or use case without having to redesign the whole system. Tensil contains an RTL generator for ML accelerators.
+
+## Model compiler
+
+A model compiler takes an ML model and a target architecture and produces binary artifacts that can be executed by that architecture. In Tensil's case, the model
+compiler produces three artifacts. The `.tprog` file is the executable containing
+instructions to be interpreted by the accelerator, the `.tdata` file contains the model's parameters in the appropriate format, and the `.tmodel` file tells the driver how to set up inputs and outputs.
+
+
+## Driver
+
+A driver takes an architecture description and a compiled model and interacts with the abstractions in the operating system or execution environment (i.e. low-level libraries) to feed the compiled model into the hardware. It is also responsible for setting up inputs and outputs, and managing any other resources that might be revelant on a given hardware platform.
 
