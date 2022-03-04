@@ -65,5 +65,5 @@ Here's a table with some known values:
 |Zynq-7000       |64 bit        |`-d 64`    |
 |Zynq Ultrascale+|128 bit       |`-d 128`   |
 
-If your FPGA family isn't listed and you need help, ask a question on Discord or
+If your FPGA family isn't listed and you need help, ask a question on [Discord](https://discord.gg/TSw34H3PXr) or
 email us at [support@tensil.ai](mailto:support@tensil.ai).

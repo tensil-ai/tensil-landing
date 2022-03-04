@@ -83,15 +83,15 @@ Program:   /work/resnet20v2_cifar_onnx.tprog
 ---------------------------------------------
 ```
 
-If you got an error or saw something you didn't expect, please let us know! You can either join our [Discord]() to ask a question, [open an issue on Github](https://github.com/tensil-ai/tensil/issues/new) or email us at [support@tensil.ai](mailto:support@tensil.ai).
-
-
 ## Next Steps
 
 Congrats! You've compiled your model and generated three important artifacts, a `.tmodel`, `.tdata` and `.tprog`. All three are needed to run your compiled model,
 so keep them handy. Assuming you have an accelerator built, you're now ready to [run your model]({{< relref "/docs/howto/run" >}}). If not, it's time to [generate an accelerator]({{< relref "/docs/howto/generate" >}}).
 
 ## Troubleshooting
+
+If you got an error or saw something you didn't expect, please let us know! You can either join our [Discord](https://discord.gg/TSw34H3PXr) to ask a question, [open an issue on Github](https://github.com/tensil-ai/tensil/issues/new) or email us at [support@tensil.ai](mailto:support@tensil.ai).
+
 
 ### Converting to ONNX didn't work?
 
