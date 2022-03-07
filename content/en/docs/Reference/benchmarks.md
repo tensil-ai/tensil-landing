@@ -6,6 +6,10 @@ description: >
   Performance benchmarks and information
 ---
 
+## Methodology
+
+Benchmarks are generated using the Tensil compiler. Each instruction is evaluated against a latency model to compute expected execution time. Actual results may therefore differ somewhat from the numbers listed here. [Help us](https://github.com/tensil-ai/tensil/blob/main/tools/src/tensil/tools/compiler/BackendStream.scala#L289) improve the latency model!
+
 ## ResNet-20v2
 
 Trained for CIFAR.
