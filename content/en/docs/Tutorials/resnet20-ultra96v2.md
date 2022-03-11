@@ -14,6 +14,8 @@ We'll give detailed end-to-end coverage that is easy to follow. In addition, we 
 
 If you get stuck or find an error, you can ask a question on our [Discord](https://discord.gg/TSw34H3PXr) or send an email to [support@tensil.ai](mailto:support@tensil.ai).
 
+*Note: due to supply chain chaos, the Ultra96 V2 is out of stock at many vendors. A good alternative is the [Pynq Z1](https://digilent.com/shop/pynq-z1-python-productivity-for-zynq-7000-arm-fpga-soc/), which is in stock. Order that one instead and by the time it arrives we'll have an adapted version of the tutorial for it posted.*
+
 ![board](/images/tutorials/resnet20-ultra96v2/board.webp)
 
 ## Overview
