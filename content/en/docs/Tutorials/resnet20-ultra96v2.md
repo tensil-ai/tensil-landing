@@ -10,11 +10,11 @@ description: >
 
 This tutorial will use the [Avnet Ultra96 V2](https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/ultra96-v2/) development board and [Tensil's open-source inference accelerator](https://www.tensil.ai/) to show how to run machine learning (ML) models on FPGA. We will be using ResNet-20 trained on the CIFAR dataset. These steps should work for any supported ML model -- currently all the common state-of-the-art convolutional neural networks are supported. Try it with your model!
 
-*Note: due to supply chain chaos, the Ultra96 V2 is out of stock at many vendors. A good alternative is the [Pynq Z1](https://digilent.com/shop/pynq-z1-python-productivity-for-zynq-7000-arm-fpga-soc/), which is in stock. Order that one instead and by the time it arrives we'll have an adapted version of the tutorial for it posted.*
-
 We'll give detailed end-to-end coverage that is easy to follow. In addition, we include in-depth explanations to get a good understanding of the technology behind it all, including the Tensil and [Xilinx Vivado](https://www.xilinx.com/products/design-tools/vivado.html) toolchains and [PYNQ framework](http://www.pynq.io).
 
 If you get stuck or find an error, you can ask a question on our [Discord](https://discord.gg/TSw34H3PXr) or send an email to [support@tensil.ai](mailto:support@tensil.ai).
+
+*Note: due to supply chain chaos, the Ultra96 V2 is out of stock at many vendors. A good alternative is the [Pynq Z1](https://digilent.com/shop/pynq-z1-python-productivity-for-zynq-7000-arm-fpga-soc/), which is in stock. Order that one instead and by the time it arrives we'll have an adapted version of the tutorial for it posted.*
 
 ![board](/images/tutorials/resnet20-ultra96v2/board.webp)
 
