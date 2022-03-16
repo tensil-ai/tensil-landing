@@ -17,7 +17,7 @@ description: >
 
 ## Frontend
 
-The frontend is responsible for handling the compiler's primary input--an ML model. With many ML frameworks in existence, the compiler isolates the specific framework support in the frontend. In other words, we envision multiple dedicated frontends able to handle models created by each ML framework. Currently, the frontend supports TensorFlow and ONNX with input in the form of _model.pb_ and _model.onnx_ files correspondingly. The frontend parses the model, represented in the form of a graph. It uses one or more output nodes to linearize the graph in a series of nodes respecting dataflow dependencies.
+The frontend is responsible for handling the compiler's primary input--an ML model. With many ML frameworks in existence, the compiler isolates the specific framework support in the frontend. In other words, we envision multiple dedicated frontends able to handle models created by each ML framework. Currently, there are two frontends supporting TensorFlow and ONNX with input in the form of _model.pb_ and _model.onnx_ files correspondingly. The frontend parses the model, represented in the form of a graph. It uses one or more output nodes to linearize the graph in a series of nodes respecting dataflow dependencies.
 
 The frontend then processes this linearized series. During this processing, the frontend is grouping model nodes to form _layers_. Each layer represents one entire cycle started with matrix multiplication, followed by a series of accumulator operations and finalized with moving the result out of accumulators. In essence, the content of accumulators and systolic array weights is never shared between layers.
 
