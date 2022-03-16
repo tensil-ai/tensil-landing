@@ -1,19 +1,13 @@
 ---
-title: "Compiler architecture"
-linkTitle: "Compiler architecture"
+title: "Compiler structure"
+linkTitle: "Compiler structure"
 date: 2022-03-16
 description: >
   Description of compiler concepts, components and their interaction
 ---
 
+## Block diagram
 ![architecture](/images/compiler/architecture.png)
-
-- [Frontend](#frontend)
-- [Memory Manager](#memory_manager)
-- [HIR](#hir)
-- [Scheduler](#scheduler)
-- [LIR](#lir)
-- [Backend](#backend)
 
 ## Frontend
 
@@ -33,7 +27,7 @@ High-level intermediate representation (HIR) is an interface offered by the sche
 
 Following are a few examples of HIR.
 
-```
+```scala
 def emitMatMul(
       weightsObjs: Seq[MemoryObject],
       biasObj: Option[MemoryObject],
@@ -43,7 +37,7 @@ def emitMatMul(
 
 The `emitMatMul` function takes weights and the bias memory objects, and a sequence of input-output object pairs. It performs matrix multiplication for each input memory object and places results in the output memory object. Input is optional, in which case it is assumed to be all zeroes. Weights and the bias must be Consts objects. Input must be Vars object, and output must be Temp object.
 
-```
+```scala
 def emitRelu(
       inputObj: MemoryObject,
       outputObj: MemoryObject
@@ -52,7 +46,7 @@ def emitRelu(
 
 The `emitRelu` function performs ReLU activation on the input object and places the result in the output object. Both input and output must be Temp objects.
 
-```
+```scala
 def emitSave(
       inputObj: MemoryObject,
       outputObj: MemoryObject
@@ -73,7 +67,7 @@ Low-level intermediate representation (LIR) is an interface offered by the backe
 
 Following are a few examples of LIR. Each produces the corresponding processing unit instruction. Note that LIR is not using instruction flags directly. The backend role is to infer these flags based on LIR arguments, such as accumulate and `toLocal` booleans and memory address tags.
 
-```
+```scala
 def emitMatMul(
       accumulate: Boolean,
       localStride: Int,
