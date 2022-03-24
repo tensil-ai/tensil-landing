@@ -2,6 +2,7 @@
 title: "Memory manager"
 linkTitle: "Memory manager"
 date: 2022-03-23
+weight: 4
 description: >
   Description of compiler memory manager
 ---

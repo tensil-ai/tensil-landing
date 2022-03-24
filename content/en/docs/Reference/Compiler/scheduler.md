@@ -2,6 +2,7 @@
 title: "Scheduler"
 linkTitle: "Scheduler"
 date: 2022-03-23
+weight: 6
 description: >
   Description of compiler execution scheduler
 ---

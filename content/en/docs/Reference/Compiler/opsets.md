@@ -2,6 +2,7 @@
 title: "Opsets"
 linkTitle: "Opsets"
 date: 2022-03-23
+weight: 3
 description: >
   Supported operations
 ---

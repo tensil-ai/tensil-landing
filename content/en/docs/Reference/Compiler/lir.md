@@ -2,6 +2,7 @@
 title: "Low-level intermediate representation"
 linkTitle: "LIR"
 date: 2022-03-23
+weight: 7
 description: >
   Explanation of LIR
 ---

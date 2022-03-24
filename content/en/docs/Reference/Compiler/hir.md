@@ -2,6 +2,7 @@
 title: "High-level intermediate representation"
 linkTitle: "HIR"
 date: 2022-03-23
+weight: 5
 description: >
   Explanation of HIR
 ---

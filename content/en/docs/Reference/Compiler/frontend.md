@@ -2,6 +2,7 @@
 title: "Frontend"
 linkTitle: "Frontend"
 date: 2022-03-23
+weight: 2
 description: >
   Description of compiler frontend
 ---
