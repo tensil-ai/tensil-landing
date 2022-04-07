@@ -97,7 +97,7 @@ copyright = "Tensil AI Company"
 # privacy_policy = "https://policies.google.com/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
-images = ["images/tutorials/yolo-ultra96v2/detect.gif"]
+images = ["https://www.tensil.ai/images/tutorials/yolo-ultra96v2/detect.gif"]
 
 # Menu title if your navbar has a versions selector to access old versions of your site.
 # This menu appears only if you have at least one [params.versions] set.
