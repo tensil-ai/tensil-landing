@@ -1,22 +1,20 @@
-
 ---
-title: "Show HN"
-linkTitle: "Shown HN"
-date: 2022-03-10
+title: "Launch HN"
+linkTitle: "Launch HN"
+date: 2022-03-25
 description: >
-  Tensil open source annoucement on HN
+  Tensil announces open source ML accelerators on Hacker News
 ---
 
 
-We recently launched Tensil AI and to engage with an initial set of users we published
-a [Show HN thread](https://news.ycombinator.com/item?id=30615605). Below are a summary of interesting questions and our responses with
-links to documentation for reference.
+After our initial open source release, we published
+a [Launch HN thread](https://news.ycombinator.com/item?id=30643520) to get some feedback from the community. We've pulled out a few of the many interesting questions and our responses with links to documentation for reference.
+
+![Launch HN wordcloud](launch-hn-wordcloud.png)
 
 ## Why FPGAs?
 
-There were several questions [1](https://news.ycombinator.com/item?id=30615605#30622434) 
-[2](https://news.ycombinator.com/item?id=30615605#30617736) [3](https://news.ycombinator.com/item?id=30615605#30619695)
-about Tensil's choice to focus initially on FPGAs.
+There were several questions about Tensil's choice to focus initially on FPGAs.
 
 > What kind of FPGAs can this reasonably run on?
 
@@ -34,8 +32,7 @@ You absolutely can use it in a data centre. You can even tape out an ASIC using 
 
 FPGAs are pretty amazing devices, but one thing that's been holding them back is how difficult they have been to work with. Typically to actually make use of an FPGA you'd need to have an FPGA expert and an embedded software engineer on your team, along with all the requisite tools and materials. Our focus is on changing that dynamic, to help get your ML model running on an edge FPGA in minutes.
 
-
-## What Models are Supported?
+## What model architectures are supported?
 
 There were several questions [1](https://news.ycombinator.com/item?id=30615605#30622434) [2](https://news.ycombinator.com/item?id=30615605#30622283)
 about Tensil's ability to support various ML model architectures.
@@ -48,7 +45,11 @@ Yes. We're aiming to support all machine learning model architectures. The broad
 
 Yes, and we provide tools to help you analyize various hardware configurations to find the best performance.
 
-## What About Quantization?
+## Do you have benchmarks?
+
+
+
+## What about quantization or model compression?
 
 Quantization is a common technique typically required with edge ML devices. Tensil makes this optional.
 
@@ -68,3 +69,8 @@ performance thanks to the huge amount of parallelism available on FPGA.
 
 We're actually working on a tool to manage and automate this hardware architecture search - watch this space!
 
+## How does Tensil compare with other options?
+
+
+
+## How does Tensil work?
