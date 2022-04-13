@@ -10,7 +10,7 @@ description: >
 
 | Name | Description | Opcode | Flags | Operand #0 | Operand #1 | Operand #2 |
 |-|-|-|-|-|-|-|
-| Wait        | Wait for all threads specified in operand #0 to complete preceeding instructions           | 0x0     | \-                                 | Bitset with one bit for each supported TID                       | \-                                 | \-                   |
+| Wait        | Wait for a thread specified in operand #0 to complete preceeding instructions              | 0x0     | \-                                 | TID to wait for                 | \-                                 | \-                   |
 | MatMul      | Load input at memory address into systolic array and store result at accumulator address   | 0x1     | Accumulate? Zeroes?                | Local Memory stride/address | Accumulator stride/address         | Size                 |
 | DataMove    | Move data between the main memory and either the accumulators or one of two off-chip DRAMs | 0x2     | Data flow control enum (see below) | Local Memory stride/address | Accumulator or DRAM stride/address | Size                 |
 | LoadWeight  | Load weight from memory address into systolic array                                        | 0x3     | Zeroes? (Ignores operand #0)       | Local Memory stride/address | Size                               | \-                   |
@@ -32,11 +32,11 @@ description: >
   - 4:4 TID
   - 3:0 flags
 
-- Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when preceeding instruction in the program that has the same TID completes.
+- Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when the preceeding instruction in the program that has the same TID completes.
 
-- TID in Wait instruction header is ignored, TID bitset in operand #0 is used instead. TID bitset contains one bit for each supported TID. LSB corresponds to 0 TID. MSBs beyond TID range are padded with zeroes. The Wait instruction serves as a barrier for all TIDs for which the corresponding bit is set to one in the TID bitset. In other words, the Wait instruction will let any of the subsequent instructions with matching TIDs to start only alter completion of all preceeding instructions with matching TIDs.
+- The Wait instruction with a given TID in its header will let any of the subsequent instructions with the same TID to start only alter completion of all preceeding instructions with their TID equal to one in Wait's header or one in Wait's operand.
 
-- Wait instruction with zeroes is TID bitset does nothing (NoOp)
+- Wait instruction with the same TID in its header and operand does nothing (NoOp)
 
 - Weights should be loaded in reverse order
 
