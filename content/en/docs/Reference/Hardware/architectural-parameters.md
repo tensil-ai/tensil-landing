@@ -15,3 +15,4 @@ description: >
 |Local depth|The number of vectors allocated in on-fabric main memory|2^{1-16}|16384 (= 2^14)|
 |Accumulator depth|The number of vectors allocated in on-fabric accumulator memory|2^{1-16}|4096 (= 2^12)|
 |SIMD registers depth|The number of registers to instantiate for each ALU in the SIMD module|0-16|1|
+|Number of threads|The number of threads for managing concurrent execution|1-8|2|

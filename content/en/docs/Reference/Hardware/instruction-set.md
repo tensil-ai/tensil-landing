@@ -10,17 +10,31 @@ description: >
 
 | Name | Description | Opcode | Flags | Operand #0 | Operand #1 | Operand #2 |
 |-|-|-|-|-|-|-|
-| NoOp        | Do nothing                                                                                 | 0x0     | \-                                 | \-                          | \-                                 | \-                   |
+| Wait        | Wait for all threads specified in operand #0 to complete preceeding instructions           | 0x0     | \-                                 | Bitset with one bit for each supported TID                       | \-                                 | \-                   |
 | MatMul      | Load input at memory address into systolic array and store result at accumulator address   | 0x1     | Accumulate? Zeroes?                | Local Memory stride/address | Accumulator stride/address         | Size                 |
 | DataMove    | Move data between the main memory and either the accumulators or one of two off-chip DRAMs | 0x2     | Data flow control enum (see below) | Local Memory stride/address | Accumulator or DRAM stride/address | Size                 |
 | LoadWeight  | Load weight from memory address into systolic array                                        | 0x3     | Zeroes? (Ignores operand #0)       | Local Memory stride/address | Size                               | \-                   |
 | SIMD        | Perform computations on data in the accumulator                                            | 0x4     | Read? Write? Accumulate?           | Accumulator write address   | Accumulator read address           | SIMD sub-instruction |
 | LoadLUT     | Load lookup tables from memory address.                                                    | 0x5     | \-                                 | Local Memory stride/address | Lookup table number                | \-                   |
-| &lt;unused> | \-                                                                                         | 0x6-0xE | \-                                 | \-                          | \-                                 | \-                   |
-| Configure   | Set configuration registers                                                                | 0xF     | \-                                 | Register number             | Value                              | \-                   |
+| &lt;unused> | \-                                                                                         | 0x6     | \-                                 | \-                          | \-                                 | \-                   |
+| Configure   | Set configuration registers                                                                | 0x7     | \-                                 | Register number             | Value                              | \-                   |
 
 
 ## Notes
+
+- Opcode size is fixed at 3 bits
+
+- Flags size is fixed at 4 bits
+
+- Instruction header consists of opcode, TID (thread ID) and flags aligned on 8-bit boundary with zero padding in MSB, for example for 2 threads the bit layout would be:
+
+  - 7:5 opcode
+  - 4:4 TID
+  - 3:0 flags
+
+- TID in Wait instruction header is ignored, TID bitset in operand #0 is used instead. TID bitset contains one bit for each supported TID. LSB corresponds to 0 TID. MSBs beyond TID range are padded with zeroes.
+
+- Wait instruction with zeroes is TID bitset does nothing (NoOp)
 
 - Weights should be loaded in reverse order
 
@@ -30,11 +44,7 @@ description: >
   - size = 1 means transfer 2 vectors
   - size = 255 means transfer 256 vectors etc.
 
-- Instruction width is a parameter supplied to the RTL generator
-
-  - Opcode field is always 4 bits
-  - Flags field is always 4 bits
-  - Instruction must be large enough to fit the maximum values of all operands in the longest instruction (MatMul, DataMove, SIMD)
+- Instruction must be large enough to fit the maximum values of all operands in the longest instruction (MatMul, DataMove, SIMD)
 
 - Flags are represented in the following order: \[3 2 1 0]
 
