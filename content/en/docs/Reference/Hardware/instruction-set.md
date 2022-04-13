@@ -34,7 +34,7 @@ description: >
 
 - Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when the preceeding instruction in the program that has the same TID completes.
 
-- The Wait instruction with a given TID in its header will let any of the subsequent instructions with the same TID to start only alter completion of all preceeding instructions with their TID equal to one in Wait's header or one in Wait's operand.
+- The Wait instruction with a given TID in its header will let the subsequent instruction with the same TID to start only alter completion of all preceeding instructions with their TID equal to one in Wait's header or one in Wait's operand.
 
 - Wait instruction with the same TID in its header and operand does nothing (NoOp)
 
