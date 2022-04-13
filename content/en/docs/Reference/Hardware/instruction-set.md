@@ -32,7 +32,9 @@ description: >
   - 4:4 TID
   - 3:0 flags
 
-- TID in Wait instruction header is ignored, TID bitset in operand #0 is used instead. TID bitset contains one bit for each supported TID. LSB corresponds to 0 TID. MSBs beyond TID range are padded with zeroes.
+- Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when preceeding instruction in the program that has the same TID completes.
+
+- TID in Wait instruction header is ignored, TID bitset in operand #0 is used instead. TID bitset contains one bit for each supported TID. LSB corresponds to 0 TID. MSBs beyond TID range are padded with zeroes. The Wait instruction serves as a barrier for all TIDs for which the corresponding bit is set to one in the TID bitset. In other words, the Wait instruction will let any of the subsequent instructions with matching TIDs to start only alter completion of all preceeding instructions with matching TIDs.
 
 - Wait instruction with zeroes is TID bitset does nothing (NoOp)
 
