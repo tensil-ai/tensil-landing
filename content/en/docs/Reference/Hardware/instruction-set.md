@@ -26,10 +26,16 @@ description: >
 
 - Flags size is fixed at 4 bits
 
-- Instruction header consists of opcode, TID (thread ID) and flags aligned on 8-bit boundary with zero padding in MSB, for example for 2 threads the bit layout would be:
+- Instruction header consists of TID (thread ID), opcode and flags aligned on 8-bit boundary with zero padding in MSB, for example for 2 threads the bit layout would be:
 
-  - 7:5 opcode
-  - 4:4 TID
+  - 7:7 1-bit TID
+  - 6:4 opcode
+  - 3:0 flags
+
+- For 1 thread the bit layout is would be:
+
+  - 7:7 padding
+  - 6:4 opcode
   - 3:0 flags
 
 - Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when the preceeding instruction in the program that has the same TID completes.
