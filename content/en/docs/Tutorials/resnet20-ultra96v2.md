@@ -1,12 +1,14 @@
 ---
-title: Learn Tensil with ResNet
-linkTitle: Learn Tensil with ResNet
+title: Learn Tensil with ResNet and Ultra96
+linkTitle: Learn Tensil with ResNet and Ultra96
 date: 2022-03-08
 description: >
-  In this tutorial you'll learn the concepts behind Tensil through a worked example
+  In this tutorial you'll learn the concepts behind Tensil through a worked example using Ultra96 development board
 ---
 
 *Originally posted [here](https://k155la3.blog/2022/03/06/tensil-tutorial-for-ultra96-v2/).*
+
+## Introduction
 
 This tutorial will use the [Avnet Ultra96 V2](https://www.avnet.com/wps/portal/us/products/avnet-boards/avnet-board-families/ultra96-v2/) development board and [Tensil's open-source inference accelerator](https://www.tensil.ai/) to show how to run machine learning (ML) models on FPGA. We will be using ResNet-20 trained on the CIFAR dataset. These steps should work for any supported ML model -- currently all the common state-of-the-art convolutional neural networks are supported. Try it with your model!
 
@@ -78,10 +80,10 @@ Now that we've selected our architecture, it's time to run the Tensil RTL genera
 To generate a design using our chosen architecture, run the following command inside the Tensil toolchain docker container:
 
 ```bash
-tensil rtl -a /demo/arch/ultra96v2.tarch -d 128
+tensil rtl -a /demo/arch/ultra96v2.tarch -s true -d 128
 ```
 
-Note the `-d 128` parameter, which specifies that the generated RTL will be compatible with 128-bit AXI interfaces supported by the ZU3EG part. This command will produce several Verilog files listed in the `ARTIFACTS` table printed out at the end. It also prints the `RTL SUMMARY` table with some of the essential parameters of the resulting RTL. We'll need to use the instruction size in bytes in the next step when designing in Vivado.
+Note the `-d 128` parameter, which specifies that the generated RTL will be compatible with 128-bit AXI interfaces supported by the ZU3EG part. This command will produce several Verilog files listed in the `ARTIFACTS` table printed out at the end. It also prints the `RTL SUMMARY` table with some of the essential parameters of the resulting RTL.
 
 ```
 -----------------------------------------------------------------------
@@ -144,13 +146,7 @@ Double-click it. Disable "Scatter Gather Engine" and "Write Channel". Change "Wi
 
 ![dma](/images/tutorials/resnet20-ultra96v2/dma.png)
 
-Again, click the plus `+` button in the Block Diagram toolbar and select "AXI4-Stream Data Width Converter". A width converter is necessary because the Tensil architecture variants may have different instruction widths depending on memory sizes and strides.
-
-Double-click the width converter block and change "Master Interface TDATA Width" to 9 bytes as printed in the `RTL SUMMARY` we saw when running the Tensil RTL tool.
-
-![width_converter](/images/tutorials/resnet20-ultra96v2/width_converter.png)
-
-Connect the `instruction` port on the Tensil `top` block to the `M_AXIS` port on the AXI4-Stream Data Width Converter. Then, connect `S_AXIS` on the AXI4-Stream Data Width Converter block to `M_AXIS_MM2S` on the AXI DMA block. Finally, connect `M_AXI_MM2S` on the AXI DMA block to `S_AXI_HP1_FPD` on Zynq.
+Connect the `instruction` port on the Tensil `top` block to `M_AXIS_MM2S` on the AXI DMA block. Then, connect `M_AXI_MM2S` on the AXI DMA block to `S_AXI_HP1_FPD` on Zynq.
 
 Once again, click the plus `+` button in the Block Diagram toolbar and select "AXI SmartConnect. The SmartConnect is necessary to expose DMA control registers to the Zynq CPU, which will enable software to control the DMA transactions. Double-click it and set "Number of Slave and Master Interfaces" to 1. 
 
@@ -268,7 +264,7 @@ Now, copy the `.tmodel`, `.tprog` and `.tdata` artifacts produced by the compile
 scp resnet20v2_cifar_onnx_ultra96v2.t* xilinx@192.168.3.1:
 ```
 
-The last thing meeded to run our ResNet model is the CIFAR dataset. You can get it from [Kaggle](https://www.kaggle.com/janzenliu/cifar-10-batches-py) or run the commands below (since we only need the test batch, we remove the training batches to reduce the file size). Put these files in `/home/xilinx/cifar-10-batches-py/` on your development board.
+The last thing needed to run our ResNet model is the CIFAR dataset. You can get it from [Kaggle](https://www.kaggle.com/janzenliu/cifar-10-batches-py) or run the commands below (since we only need the test batch, we remove the training batches to reduce the file size). Put these files in `/home/xilinx/cifar-10-batches-py/` on your development board.
 
 ```bash
 wget http://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz
@@ -301,6 +297,29 @@ import matplotlib.pyplot as plt
 import pickle
 ```
 
+Now, initialize the PYNQ overlay from the bitstream and instantiate the Tensil driver using the TCU architecture and the overlay's DMA configuration. Note that we are passing `axi_dma_0` object from the overlay -- the name matches the DMA block in the Vivado design.
+
+```python
+overlay = Overlay('/home/xilinx/tensil_ultra96v2.bit')
+tcu = Driver(ultra96, overlay.axi_dma_0)
+```
+
+The Tensil PYNQ driver includes the Ultra96 architecture definition. Here it is in an excerpt from `architecture.py`: you can see that it matches the architecture we used previously.
+
+```python
+ultra96 = Architecture(
+    data_type=DataType.FP16BP8,
+    array_size=16,
+    dram0_depth=2097152,
+    dram1_depth=2097152,
+    local_depth=20480,
+    accumulator_depth=4096,
+    simd_registers_depth=1,
+    stride0_depth=8,
+    stride1_depth=8,
+)
+```
+
 Next, let's load CIFAR images from the `test_batch`.
 
 ```python
@@ -327,10 +346,9 @@ def show_img(data, n):
     plt.imshow(np.transpose(data[n].reshape((3, 32, 32)), axes=[1, 2, 0]))
 
 def get_img(data, n):
-    array_width = 16
     img = np.transpose(data_norm[n].reshape((3, 32, 32)), axes=[1, 2, 0])
-    img = np.pad(img, [(0, 0), (0, 0), (0, array_width - 3)], 'constant', constant_values=0)
-    return img.reshape((-1, array_width))
+    img = np.pad(img, [(0, 0), (0, 0), (0, tcu.arch.array_size - 3)], 'constant', constant_values=0)
+    return img.reshape((-1, tcu.arch.array_size))
 
 def get_label(labels, label_names, n):
     label_idx = labels[n]
@@ -351,40 +369,10 @@ You should see the image.
 
 ![frog](/images/tutorials/resnet20-ultra96v2/frog.png)
 
-Then, specify the location of the bitstream and hardware handoff file.
-
-```python
-bitstream = '/home/xilinx/tensil_ultra96v2.bit'
-```
-
-Now, initialize the PYNQ overlay from the bitstream and instantiate the Tensil driver using the TCU architecture and the overlay's DMA configuration. Note that we are passing `axi_dma_0` object from the overlay -- the name matches the DMA block in the Vivado design.
-
-```python
-overlay = Overlay(bitstream)
-tcu = Driver(ultra96, overlay.axi_dma_0)
-```
-
-The Tensil PYNQ driver includes the Ultra96 architecture definition. Here it is in an excerpt from `architecture.py`: you can see that it matches the architecture we used previously.
-
-```python
-ultra96 = Architecture(
-    data_type=DataType.FP16BP8,
-    array_size=16,
-    dram0_depth=2097152,
-    dram1_depth=2097152,
-    local_depth=20480,
-    accumulator_depth=4096,
-    simd_registers_depth=1,
-    stride0_depth=8,
-    stride1_depth=8,
-)
-```
-
 Next, load the `tmodel` manifest for the model into the driver. The manifest tells the driver where to find the other two binary files (program and weights data).
 
 ```python
-resnet = '/home/xilinx/resnet20v2_cifar_onnx_ultra96v2.tmodel'
-tcu.load_model(resnet)
+tcu.load_model('/home/xilinx/resnet20v2_cifar_onnx_ultra96v2.tmodel')
 ```
 
 Finally, run the model and print the results! The call to `tcu.run(inputs)` is where the magic happens. We'll convert the ResNet classification result vector into CIFAR labels. Note that if you are using the ONNX model, the input and output are named `x:0` and `Identity:0` respectively. For the TensorFlow model they are named `x` and `Identity`.
