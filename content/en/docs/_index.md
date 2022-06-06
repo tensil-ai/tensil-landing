@@ -1,4 +1,3 @@
-
 ---
 title: "Welcome to Tensil"
 linkTitle: "Documentation"
