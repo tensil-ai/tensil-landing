@@ -130,7 +130,7 @@ github_project_repo = "https://github.com/tensil-ai/tensil"
 # github_branch= "main"
 
 # Google Custom Search Engine ID. Remove or comment out to disable search.
-gcs_engine_id = "d72aa9b2712488cc3"
+gcs_engine_id = "3169f6510c03d3e38"
 
 # Enable Algolia DocSearch
 # algolia_docsearch = true
@@ -212,3 +212,7 @@ enable = false
   url = "https://github.com/tensil-ai/tensil"
   pre = "<iframe src='https://ghbtns.com/github-btn.html?user=tensil-ai&repo=tensil&type=star&count=true&size=large' frameborder='0' scrolling='0' width='170' height='30' title='GitHub'></iframe>"
   weight = 1
+[[menu.main]]
+  name = "Explorer"
+  url = "https://explorer.tensil.ai"
+  weight = 60
