@@ -10,17 +10,39 @@ description: >
 
 | Name | Description | Opcode | Flags | Operand #0 | Operand #1 | Operand #2 |
 |-|-|-|-|-|-|-|
-| NoOp        | Do nothing                                                                                 | 0x0     | \-                                 | \-                          | \-                                 | \-                   |
+| Wait        | Wait for a thread specified in operand #0 to complete preceeding instructions              | 0x0     | \-                                 | TID to wait for                 | \-                                 | \-                   |
 | MatMul      | Load input at memory address into systolic array and store result at accumulator address   | 0x1     | Accumulate? Zeroes?                | Local Memory stride/address | Accumulator stride/address         | Size                 |
 | DataMove    | Move data between the main memory and either the accumulators or one of two off-chip DRAMs | 0x2     | Data flow control enum (see below) | Local Memory stride/address | Accumulator or DRAM stride/address | Size                 |
 | LoadWeight  | Load weight from memory address into systolic array                                        | 0x3     | Zeroes? (Ignores operand #0)       | Local Memory stride/address | Size                               | \-                   |
 | SIMD        | Perform computations on data in the accumulator                                            | 0x4     | Read? Write? Accumulate?           | Accumulator write address   | Accumulator read address           | SIMD sub-instruction |
 | LoadLUT     | Load lookup tables from memory address.                                                    | 0x5     | \-                                 | Local Memory stride/address | Lookup table number                | \-                   |
-| &lt;unused> | \-                                                                                         | 0x6-0xE | \-                                 | \-                          | \-                                 | \-                   |
-| Configure   | Set configuration registers                                                                | 0xF     | \-                                 | Register number             | Value                              | \-                   |
+| &lt;unused> | \-                                                                                         | 0x6     | \-                                 | \-                          | \-                                 | \-                   |
+| Configure   | Set configuration registers                                                                | 0x7     | \-                                 | Register number             | Value                              | \-                   |
 
 
 ## Notes
+
+- Opcode size is fixed at 3 bits
+
+- Flags size is fixed at 4 bits
+
+- Instruction header consists of TID (thread ID), opcode and flags aligned on 8-bit boundary with zero padding in MSB, for example for 2 threads the bit layout would be:
+
+  - 7:7 1-bit TID
+  - 6:4 opcode
+  - 3:0 flags
+
+- For 1 thread the bit layout is would be:
+
+  - 7:7 padding
+  - 6:4 opcode
+  - 3:0 flags
+
+- Instructions having the same TID are executed sequentially. In other words, the instruction with a given TID will start only when the preceeding instruction in the program that has the same TID completes.
+
+- The Wait instruction with a given TID in its header will let the subsequent instruction with the same TID to start only alter completion of all preceeding instructions with their TID equal to one in Wait's header or one in Wait's operand.
+
+- Wait instruction with the same TID in its header and operand does nothing (NoOp)
 
 - Weights should be loaded in reverse order
 
@@ -30,11 +52,7 @@ description: >
   - size = 1 means transfer 2 vectors
   - size = 255 means transfer 256 vectors etc.
 
-- Instruction width is a parameter supplied to the RTL generator
-
-  - Opcode field is always 4 bits
-  - Flags field is always 4 bits
-  - Instruction must be large enough to fit the maximum values of all operands in the longest instruction (MatMul, DataMove, SIMD)
+- Instruction must be large enough to fit the maximum values of all operands in the longest instruction (MatMul, DataMove, SIMD)
 
 - Flags are represented in the following order: \[3 2 1 0]
 
